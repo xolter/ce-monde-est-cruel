@@ -8,7 +8,7 @@ use Hackathon\Game\Result;
  * Class OosalonPlayers
  * @package Hackathon\PlayerIA
  * @author Bryan Andriamasy
- * @comment If i won I play the same, else I Counter pick, if draw then I choose paper, If it's tight I double counter
+ * @comment If it's tight I double counter, If i won I play the same, else I Counter pick, if draw then I choose paper
  */
 class OosalonPlayer extends Player
 {
@@ -22,14 +22,14 @@ class OosalonPlayer extends Player
         $myLastScore = $this->result->getLastScoreFor($this->mySide);
         $counterPick = $this->counterChoice($myLastChoice);
         $nbRound = $this->result->getNbRound();
+        if ($nbRound > 500 && $this->scoreIsTight()) {
+            return $this->counterChoice($counterPick);
+        }
         if ($myLastScore === 0) {
             return $counterPick;
         }
         elseif ($myLastScore === 1) {
             return parent::paperChoice();
-        }
-        if ($nbRound > 500 && $this->scoreIsTight()) {
-            return $this->counterChoice($counterPick);
         }
         return $myLastChoice;
     }
@@ -49,7 +49,7 @@ class OosalonPlayer extends Player
         $oppoStat= $this->result->getStatsFor($this->opponentSide);
         $diff = $myStat['score'] - $oppoStat['score'];
         if ($diff < 0) {
-            $diff = $diff * -1;
+            $diff = $diff * - 1;
         }
         return $diff < 20;
     }
