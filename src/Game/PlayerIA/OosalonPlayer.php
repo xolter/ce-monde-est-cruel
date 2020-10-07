@@ -32,6 +32,6 @@ class OosalonPlayer extends Player
         elseif ($myLastScore === 1) {
             return parent::paperChoice();
         }
-        return parent::rockChoice();
+        return $myLastChoice;
     }
 };
